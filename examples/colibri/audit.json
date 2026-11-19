@@ -1,0 +1,12 @@
+{
+ "parts": 44,
+ "checks": {
+  "closed": [],
+  "interference": [],
+  "support": [],
+  "gears": []
+ },
+ "poses": 26,
+ "pairs_tested": 1380,
+ "problems": 0
+}
