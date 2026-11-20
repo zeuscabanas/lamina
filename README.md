@@ -1,19 +1,68 @@
 # lamina
 
-A skill for Claude Code that explains how a machine works as a page of live 3D figures.
+**Ask how something works. Get a page that shows you.**
 
-Ask how something works. Claude models it in Blender as real parts that fit, proves that nothing passes through
-anything, and writes a short explained page where the same model appears whole, open, as a bare mechanism, in motion
-and taken apart.
+lamina is a skill for Claude Code. You name a machine; Claude models it in 3D as real parts that fit together, proves
+that nothing passes through anything, and writes a short explained page where you meet the machine five or six
+times: whole, opened, its mechanism alone, moving, and taken apart. Every figure is live. Drag it, slow it down,
+pull the shell off, pick a part.
 
-![The page](docs/pagina.png)
+![A lamina page: the Kestrel R-10](docs/coche-pagina.png)
+
+<p align="center"><i>One prompt, one offline HTML file. The Kestrel R-10 is a fictional sports car with ten cold-gas thrusters: 245 parts, five figures.</i></p>
+
+## One model, seen five ways
 
 | | |
 |---|---|
-| ![Fig 2, the inside](docs/fig2-interior.png) | ![Fig 3, the mechanism](docs/fig3-mecanismo.png) |
-| The shell lifts off the airframe | The drive alone: motor, gears, crank, yoke, rack, pinion |
-| ![Fig 1, the whole bird](docs/fig1-conjunto.png) | ![Fig 6, a selected part](docs/fig6-pieza.png) |
-| The whole machine working | A named part selected: the rest fades |
+| ![The whole car](docs/coche-conjunto.png) | ![The gas system inside](docs/coche-interior.png) |
+| **The whole thing.** White and gold on a dark page, by default. | **The inside.** The body turns to glass and the system that matters stays solid. |
+| ![The rear nozzles firing](docs/coche-toberas.png) | ![The exploded view](docs/coche-despiece.png) |
+| **The mechanism, working.** With the numbers that drive it, live in the corner. | **Every part.** A slider pulls it apart; a button per part fades the rest and tells you what it does. |
+
+## Why it is different
+
+- **The model is real.** Parts are closed volumes built from code in Blender. Shafts go through holes, gears sit at
+  the right centre distance, nothing is painted on.
+- **It is checked, not eyeballed.** An audit sweeps the whole motion on the actual meshes and fails on any part that
+  passes through another, floats, or meshes at the wrong distance. The first run on the example found 43
+  interferences. The published one has zero.
+- **It explains, it does not decorate.** A lead, a few sentences per figure, one fact in each caption, a table of the
+  numbers and where they come from. One or two controls per figure, all of them real.
+- **One file.** The page is a single HTML file that opens offline: the model, three.js and the fonts are inside.
+- **The same model everywhere.** All the figures share one model and one WebGL renderer, so the open view, the exploded
+  view and the readouts cannot disagree.
+
+<table><tr>
+<td><img src="docs/colibri-conjunto.png" alt="Calypte HM-4, the whole bird"></td>
+<td><img src="docs/colibri-pieza.png" alt="Calypte HM-4, a selected part"></td>
+</tr><tr>
+<td colspan="2" align="center"><i>The example in this repo: Calypte HM-4, a fictional 12 g robotic hummingbird. 44 parts, six figures, a wing drive you can scrub by hand.</i></td>
+</tr></table>
+
+## Try it
+
+```
+git clone https://github.com/zeuscabanas/lamina ~/.claude/skills/lamina
+cd ~/.claude/skills/lamina
+npm install && npx playwright install chromium
+```
+
+You need Node.js 20+, and Blender 4.2+ on your PATH (or `pip install bpy`). Then ask Claude Code in plain words:
+
+> Explícame cómo funciona un diferencial de coche con una lámina.
+
+> Make me a lamina of a mechanical watch movement.
+
+> How does a jet engine work? Show me.
+
+Or build the hummingbird that ships with it:
+
+```
+python examples/colibri/model.py --audit     # or: blender -b -P examples/colibri/model.py -- --audit
+node build.mjs examples/colibri              # out/colibri.html
+node scripts/shots.mjs out/colibri.html      # screenshots and control checks
+```
 
 ## This is a unification, and an experiment
 
@@ -28,33 +77,7 @@ Nothing here is a new idea. lamina joins three things other people made and test
 The merit is theirs. What lamina adds is the glue: modelling in Blender from code, a mesh-level audit, and a page kit
 that shows one audited model in several figures. Details and licences in [CREDITS.md](CREDITS.md).
 
-It is young. One example, one author, tested in a software renderer. Expect rough edges.
-
-## Install
-
-```
-git clone https://github.com/zeuscabanas/lamina ~/.claude/skills/lamina
-cd ~/.claude/skills/lamina
-npm install && npx playwright install chromium
-```
-
-You need Node.js 20+, and Blender 4.2+ on your PATH (or `pip install bpy`).
-
-## Use
-
-Ask Claude Code in plain words:
-
-> Explícame cómo funciona un diferencial de coche con una lámina.
-
-> Hazme una página que explique un reloj mecánico por dentro.
-
-Or build the example:
-
-```
-python examples/colibri/model.py --audit     # or: blender -b -P examples/colibri/model.py -- --audit
-node build.mjs examples/colibri              # out/colibri.html
-node scripts/shots.mjs out/colibri.html      # screenshots and control checks
-```
+It is young: two machines so far, one author. Expect rough edges, and tell me what breaks.
 
 ## What is inside
 
